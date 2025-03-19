@@ -2,9 +2,7 @@ from dataclasses import dataclass
 import random
 from enum import Enum
 
-
-class ValueObject:
-    """Базовый класс для всех Value-Object"""
+from core.domain.model.shared_kernel.value_object import ValueObject
 
 
 class LocationSize(Enum):
