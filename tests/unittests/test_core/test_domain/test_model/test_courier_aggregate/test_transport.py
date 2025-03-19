@@ -1,8 +1,9 @@
 import unittest
 from uuid import UUID
 
+from core.domain.model.shared_kernel.entity import BusinessRuleBrokenException
 from core.domain.model.shared_kernel.location import Location
-from core.domain.model.courier_aggregate.transport import Transport, BusinessRuleBrokenException
+from core.domain.model.courier_aggregate.transport import Transport
 
 
 class TestTransport(unittest.TestCase):
