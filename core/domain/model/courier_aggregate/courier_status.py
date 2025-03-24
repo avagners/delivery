@@ -19,11 +19,11 @@ class CourierStatusValue(Enum):
 class CourierStatus(ValueObject):
     """Value Object для статуса курьера"""
 
-    name: str
+    name: CourierStatusValue
 
     def __post_init__(self):
         # Проверка, что значение статуса допустимо
-        if self.name not in [status.value for status in CourierStatusValue]:
+        if self.name not in [status for status in CourierStatusValue]:
             raise ValueError(f"Invalid status: {self.name}")
 
     def __eq__(self, other: Any) -> bool:
@@ -35,4 +35,4 @@ class CourierStatus(ValueObject):
         return hash(self.name)
 
     def __str__(self) -> str:
-        return self.name
+        return self.name.value

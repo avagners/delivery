@@ -1,7 +1,8 @@
 from dataclasses import dataclass
 
-from core.domain.model.shared_kernel.entity import Entity, BusinessRule
+from core.domain.model.shared_kernel.entity import Entity
 from core.domain.model.shared_kernel.location import Location
+from core.domain.model.shared_kernel.business_rule_exception import BusinessRule
 
 
 @dataclass
