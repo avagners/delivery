@@ -1,28 +1,13 @@
-from abc import ABC, abstractmethod
+from abc import ABC
 from dataclasses import dataclass, field
+
+from core.domain.model.shared_kernel.business_rule_exception import BusinessRule, BusinessRuleBrokenException
 
 import uuid
 
 
-class BusinessRule(ABC):
-    """Абстрактный класс для бизнес-правил"""
-
-    @abstractmethod
-    def is_broken(self) -> bool:
-        """Проверяет, нарушено ли правило"""
-        raise NotImplementedError
-
-
-class BusinessRuleBrokenException(Exception):
-    """Исключение, которое выбрасывается при нарушении бизнес-правила"""
-
-    def __init__(self, rule: BusinessRule):
-        self.rule = rule
-        super().__init__(f"Business rule {rule.__class__.__name__} is broken: {rule}")
-
-
 @dataclass
-class Entity:
+class Entity(ABC):
     """Базовый класс для всех Entities"""
     id: uuid.UUID = field(default_factory=lambda: globals()['Entity'].next_id(), kw_only=True)
 
