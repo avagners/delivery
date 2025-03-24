@@ -1,22 +1,22 @@
 import uuid
 from typing import Optional
 
-
 from core.domain.model.shared_kernel.location import Location
 from core.domain.model.order_aggregate.order_status import OrderStatus, OrderStatusValue
 from core.domain.model.shared_kernel.aggregate import Aggregate
+from core.domain.model.shared_kernel.business_rule_exception import BusinessRule
 
 
 class Order(Aggregate):
     """Заказ"""
 
     def __init__(self, order_id: uuid.UUID, location: Location):
-        if not order_id:
-            raise ValueError("Order ID is required")
-        if not location:
-            raise ValueError("Location is required")
-
         super().__init__(order_id)
+
+        # Проверка бизнес-правил
+        self.check_rule(ValidOrderIdRule(order_id))
+        self.check_rule(ValidLocationRule(location))
+
         self.location = location
         self.status = OrderStatus(OrderStatusValue.CREATED)
         self.courier_id: Optional[uuid.UUID] = None
@@ -25,15 +25,67 @@ class Order(Aggregate):
         """Назначение заказа курьеру"""
         if not courier_id:
             raise ValueError("Courier ID is required")
-        if self.status != OrderStatus(OrderStatusValue.CREATED):
-            raise ValueError("Cannot assign an already assigned or completed order.")
+
+        self.check_rule(OrderCanBeAssignedRule(self.status))
 
         self.status = OrderStatus(OrderStatusValue.ASSIGNED)
         self.courier_id = courier_id
 
     def complete(self):
         """Завершение заказа"""
-        if self.status != OrderStatus(OrderStatusValue.ASSIGNED):
-            raise ValueError("Cannot complete an order that has not been assigned.")
+        self.check_rule(OrderCanBeCompletedRule(self.status))
 
         self.status = OrderStatus(OrderStatusValue.COMPLETED)
+
+
+# Бизнес-правила для Order
+class ValidOrderIdRule(BusinessRule):
+    """Правило: ID заказа должен быть валидным"""
+
+    def __init__(self, order_id: uuid.UUID):
+        self.order_id = order_id
+
+    def is_broken(self) -> bool:
+        return self.order_id is None or self.order_id == uuid.UUID(int=0)
+
+    def __str__(self):
+        return "Order ID cannot be empty or zero."
+
+
+class ValidLocationRule(BusinessRule):
+    """Правило: местоположение заказа должно быть задано"""
+
+    def __init__(self, location: Location):
+        self.location = location
+
+    def is_broken(self) -> bool:
+        return self.location is None
+
+    def __str__(self):
+        return "Order location cannot be empty."
+
+
+class OrderCanBeAssignedRule(BusinessRule):
+    """Правило: заказ можно назначить только если он в статусе 'CREATED'"""
+
+    def __init__(self, status: OrderStatus):
+        self.status = status
+
+    def is_broken(self) -> bool:
+        return self.status != OrderStatus(OrderStatusValue.CREATED)
+
+    def __str__(self):
+        return "Order can only be assigned if it is in 'CREATED' status."
+
+
+class OrderCanBeCompletedRule(BusinessRule):
+    """Правило: заказ можно завершить только если он в статусе 'ASSIGNED'"""
+
+    def __init__(self, status: OrderStatus):
+        self.status = status
+
+    def is_broken(self) -> bool:
+        return self.status != OrderStatus(OrderStatusValue.ASSIGNED)
+
+    def __str__(self):
+        return "Order can only be completed if it is in 'ASSIGNED' status."
