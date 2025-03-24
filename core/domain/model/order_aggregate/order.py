@@ -89,3 +89,27 @@ class OrderCanBeCompletedRule(BusinessRule):
 
     def __str__(self):
         return "Order can only be completed if it is in 'ASSIGNED' status."
+
+
+if __name__ == "__main__":
+    # Создание заказа
+    order_id = uuid.uuid4()
+    location = Location(5, 10)
+    order = Order(order_id, location)
+
+    print(f"Создан заказ: ID={order.id}, Статус={order.status.name}, Локация=({order.location.x}, {order.location.y})")
+
+    # Назначение курьера
+    courier_id = uuid.uuid4()
+    try:
+        order.assign_to_courier(courier_id)
+        print(f"Заказ {order.id} назначен курьеру {order.courier_id}, новый статус: {order.status.name}")
+    except Exception as e:
+        print(f"Ошибка при назначении курьера: {e}")
+
+    # Завершение заказа
+    try:
+        order.complete()
+        print(f"Заказ {order.id} завершён, новый статус: {order.status.name}")
+    except Exception as e:
+        print(f"Ошибка при завершении заказа: {e}")
