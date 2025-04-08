@@ -18,7 +18,7 @@ class Order(Aggregate):
         self.check_rule(ValidLocationRule(location))
 
         self.location = location
-        self.status = OrderStatus(OrderStatusValue.CREATED)
+        self.status = OrderStatus.set_created()
         self.courier_id: Optional[uuid.UUID] = None
 
     def assign_to_courier(self, courier_id: uuid.UUID):
@@ -28,14 +28,14 @@ class Order(Aggregate):
 
         self.check_rule(OrderCanBeAssignedRule(self.status))
 
-        self.status = OrderStatus(OrderStatusValue.ASSIGNED)
+        self.status = OrderStatus.set_assigned()
         self.courier_id = courier_id
 
     def complete(self):
         """Завершение заказа"""
         self.check_rule(OrderCanBeCompletedRule(self.status))
 
-        self.status = OrderStatus(OrderStatusValue.COMPLETED)
+        self.status = OrderStatus.set_completed()
 
 
 # Бизнес-правила для Order
@@ -72,7 +72,7 @@ class OrderCanBeAssignedRule(BusinessRule):
         self.status = status
 
     def is_broken(self) -> bool:
-        return self.status != OrderStatus(OrderStatusValue.CREATED)
+        return self.status.name != OrderStatusValue.CREATED
 
     def __str__(self):
         return "Order can only be assigned if it is in 'CREATED' status."
@@ -85,7 +85,7 @@ class OrderCanBeCompletedRule(BusinessRule):
         self.status = status
 
     def is_broken(self) -> bool:
-        return self.status != OrderStatus(OrderStatusValue.ASSIGNED)
+        return self.status.name != OrderStatusValue.ASSIGNED
 
     def __str__(self):
         return "Order can only be completed if it is in 'ASSIGNED' status."
