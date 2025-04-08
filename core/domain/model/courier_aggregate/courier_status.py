@@ -21,6 +21,14 @@ class CourierStatus(ValueObject):
 
     name: CourierStatusValue
 
+    @classmethod
+    def set_free(cls) -> 'CourierStatus':
+        return cls(CourierStatusValue.FREE)
+
+    @classmethod
+    def set_busy(cls) -> 'CourierStatus':
+        return cls(CourierStatusValue.BUSY)
+
     def __post_init__(self):
         # Проверка, что значение статуса допустимо
         if self.name not in [status for status in CourierStatusValue]:
