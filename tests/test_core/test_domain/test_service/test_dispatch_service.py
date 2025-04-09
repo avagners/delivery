@@ -5,7 +5,7 @@ from core.domain.model.courier_aggregate.courier import Courier
 from core.domain.model.order_aggregate.order import Order
 from core.domain.services.dispatch_service import DispatchService
 from core.domain.model.shared_kernel.location import Location
-from core.domain.model.courier_aggregate.courier import CourierStatusValue
+from core.domain.model.courier_aggregate.courier_status import CourierStatusValue
 from core.domain.model.courier_aggregate.courier import CourierStatus
 
 
@@ -48,7 +48,7 @@ class TestDispatchService(unittest.TestCase):
 
     def test_dispatch_ignores_busy_couriers(self):
         """Тест, что занятые курьеры игнорируются"""
-        self.courier2.status = CourierStatus(CourierStatusValue.BUSY)
+        self.courier2.status = CourierStatus.set_busy()
         couriers = [self.courier2, self.courier1]
 
         result = DispatchService.dispatch(self.order, couriers)

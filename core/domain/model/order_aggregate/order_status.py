@@ -22,6 +22,18 @@ class OrderStatus(ValueObject):
 
     name: OrderStatusValue
 
+    @classmethod
+    def set_created(cls) -> 'OrderStatus':
+        return cls(OrderStatusValue.CREATED)
+
+    @classmethod
+    def set_assigned(cls) -> 'OrderStatus':
+        return cls(OrderStatusValue.ASSIGNED)
+
+    @classmethod
+    def set_completed(cls) -> 'OrderStatus':
+        return cls(OrderStatusValue.COMPLETED)
+
     def __post_init__(self):
         # Проверка, что значение статуса допустимо
         if self.name not in [status for status in OrderStatusValue]:

@@ -1,8 +1,9 @@
+from typing import Optional
 import uuid
 
 from core.domain.model.shared_kernel.location import Location
 from core.domain.model.courier_aggregate.transport import Transport
-from core.domain.model.courier_aggregate.courier_status import CourierStatus, CourierStatusValue
+from core.domain.model.courier_aggregate.courier_status import CourierStatus
 from core.domain.model.shared_kernel.aggregate import Aggregate
 from core.domain.model.shared_kernel.business_rule_exception import BusinessRule
 
@@ -10,23 +11,25 @@ from core.domain.model.shared_kernel.business_rule_exception import BusinessRule
 class Courier(Aggregate):
     """Курьер"""
 
-    def __init__(self, name: str, transport_name: str, transport_speed: int, location: Location):
+    def __init__(self, name: str, transport_name: str, transport_speed: int, location: Location, id: Optional[uuid.UUID] = None):
         self.check_rule(NotEmptyNameRule(name))
         self.check_rule(ValidLocationRule(location))
 
-        super().__init__(uuid.uuid4())
+        # Явное создание UUID если не передан
+        aggregate_id = id if id is not None else uuid.uuid4()
+        super().__init__(aggregate_id)
         self.name = name
         self.transport = Transport(transport_name, transport_speed)
         self.location = location
-        self.status = CourierStatus(CourierStatusValue.FREE)  # Курьер создается свободным
+        self.status = CourierStatus.set_free()  # Курьер создается свободным
 
     def set_busy(self) -> None:
         """Установить статус 'занят'"""
-        self.status = CourierStatus(CourierStatusValue.BUSY)
+        self.status = CourierStatus.set_busy()
 
     def set_free(self) -> None:
         """Установить статус 'свободен'"""
-        self.status = CourierStatus(CourierStatusValue.FREE)
+        self.status = CourierStatus.set_free()
 
     def calc_steps_to_location(self, target_location: Location) -> int:
         """Вычислить количество шагов до указанного местоположения"""

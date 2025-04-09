@@ -8,8 +8,8 @@ class TestCourierStatus(unittest.TestCase):
 
     def test_valid_statuses(self):
         """Проверяем, что можно создать объект с допустимыми статусами"""
-        free_status = CourierStatus(CourierStatusValue.FREE)
-        busy_status = CourierStatus(CourierStatusValue.BUSY)
+        free_status = CourierStatus.set_free()
+        busy_status = CourierStatus.set_busy()
 
         self.assertEqual(free_status.name, CourierStatusValue.FREE)
         self.assertEqual(busy_status.name, CourierStatusValue.BUSY)
@@ -21,23 +21,23 @@ class TestCourierStatus(unittest.TestCase):
 
     def test_equality(self):
         """Проверяем, что объекты с одинаковым статусом равны, а с разными — нет"""
-        status1 = CourierStatus(CourierStatusValue.FREE)
-        status2 = CourierStatus(CourierStatusValue.FREE)
-        status3 = CourierStatus(CourierStatusValue.BUSY)
+        status1 = CourierStatus.set_free()
+        status2 = CourierStatus.set_free()
+        status3 = CourierStatus.set_busy()
 
         self.assertEqual(status1, status2)
         self.assertNotEqual(status1, status3)
 
     def test_hash(self):
         """Проверяем, что hash одинаков для одинаковых статусов"""
-        status1 = CourierStatus(CourierStatusValue.FREE)
-        status2 = CourierStatus(CourierStatusValue.FREE)
+        status1 = CourierStatus.set_free()
+        status2 = CourierStatus.set_free()
 
         self.assertEqual(hash(status1), hash(status2))
 
     def test_string_representation(self):
         """Проверяем, что строковое представление соответствует значению"""
-        status = CourierStatus(CourierStatusValue.FREE)
+        status = CourierStatus.set_free()
         self.assertEqual(str(status), "free")
 
 
