@@ -39,7 +39,7 @@ class OrderRepositoryImpl(OrderRepository):
         order_model.courier_id = order.courier_id
 
     def get_by_id(self, order_id: UUID) -> Optional[Order]:
-        order_model = self.session.query(OrderModel).get(order_id)
+        order_model = self.session.get(OrderModel, order_id)
         if order_model is None:
             return None
 
