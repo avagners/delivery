@@ -2,3 +2,4 @@ psycopg2-binary==2.9.10
 SQLAlchemy==2.0.40
 sqlalchemy2-stubs==0.0.2a38
 typing_extensions==4.13.1
+pytest==8.3.5
