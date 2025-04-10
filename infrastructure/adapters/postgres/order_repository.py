@@ -6,7 +6,6 @@ from core.domain.model.order_aggregate.order import Order, OrderStatusValue, Ord
 from core.domain.model.shared_kernel.location import Location
 from core.ports.order_repository_abc import OrderRepository
 from infrastructure.adapters.postgres.models import OrderModel
-from core.domain.model.shared_kernel.location import Location
 
 
 class OrderRepositoryImpl(OrderRepository):

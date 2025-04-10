@@ -25,7 +25,7 @@ class TestOrderRepository(unittest.TestCase):
 
     def test_add_order(self):
         # Настраиваем mock для get_by_id (возвращаем None - заказ не существует)
-        self.mock_session.query.return_value.get.return_value = None
+        self.mock_session.get.return_value = None
 
         self.repo.add(self.sample_order)
 
