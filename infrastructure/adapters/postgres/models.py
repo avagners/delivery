@@ -1,14 +1,14 @@
 import uuid
 
-from sqlalchemy import Column, Integer, String, Enum as SQLEnum, ForeignKey
+from sqlalchemy import Column, Integer, String, Enum as SQLEnum, ForeignKey, MetaData
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import declarative_base
 
 from core.domain.model.courier_aggregate.courier_status import CourierStatusValue
 from core.domain.model.order_aggregate.order_status import OrderStatusValue
 
-
-Base = declarative_base()
+metadata = MetaData()
+Base = declarative_base(metadata=metadata)
 
 
 class CourierModel(Base):
