@@ -13,7 +13,6 @@ from core.domain.services.dispatch_service import DispatchService
 def test_assign_orders_command_handler(uow):
     # Arrange
     order_id = uuid.uuid4()
-    print(order_id)
 
     order = Order(order_id=order_id, location=Location(10, 10))
     courier = Courier(
