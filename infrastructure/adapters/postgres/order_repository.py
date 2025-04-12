@@ -28,7 +28,7 @@ class OrderRepositoryImpl(OrderRepository):
         self.session.add(order_model)
 
     def update(self, order: Order) -> None:
-        order_model = self.session.query(OrderModel).get(order.id)
+        order_model = self.session.get(OrderModel, order.id)
         if order_model is None:
             raise ValueError(f"Order with id {order.id} not found")
 

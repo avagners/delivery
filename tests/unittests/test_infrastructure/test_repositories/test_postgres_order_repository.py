@@ -64,7 +64,7 @@ class TestOrderRepository(unittest.TestCase):
             courier_id=None
         )
 
-        self.mock_session.query.return_value.get.return_value = mock_model
+        self.mock_session.get.return_value = mock_model
 
         # Создаем заказ и назначаем курьера
         order = Order(

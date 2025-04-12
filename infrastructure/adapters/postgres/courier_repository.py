@@ -31,7 +31,7 @@ class CourierRepositoryImpl(CourierRepository):
         self.session.add(courier_model)
 
     def update(self, courier: Courier) -> None:
-        courier_model = self.session.query(CourierModel).get(courier.id)
+        courier_model = self.session.get(CourierModel, courier.id)
         if courier_model is None:
             raise ValueError(f"Courier with id {courier.id} not found")
 
@@ -43,7 +43,7 @@ class CourierRepositoryImpl(CourierRepository):
         courier_model.status = CourierStatusValue(courier.status.name.value)
 
     def get_by_id(self, courier_id: UUID) -> Optional[Courier]:
-        courier_model = self.session.query(CourierModel).get(courier_id)
+        courier_model = self.session.get(CourierModel, courier_id)
         if courier_model is None:
             return None
 
