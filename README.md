@@ -65,13 +65,13 @@ docker exec -it delivery-postgres-1 psql -U ddd_user -d ddd_delivery -c "SELECT 
 ## Запуск тестов
 
 ```bash
-python3 -m unittest discover -t . -s tests/ -p "test_*.py" -v
+pytest
 ```
 
 Или для конкретного теста:
 
 ```bash
-python3 -m unittest tests/test_infrastructure/test_repositories/test_postgres_courier_repository.py -v
+pytest tests/integration/test_create_order_integration.py
 ```
 
 

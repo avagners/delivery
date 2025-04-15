@@ -6,7 +6,6 @@ from core.domain.model.order_aggregate.order import Order, OrderStatusValue, Ord
 from core.domain.model.shared_kernel.location import Location
 from core.ports.order_repository_abc import OrderRepository
 from infrastructure.adapters.postgres.models import OrderModel
-from core.domain.model.shared_kernel.location import Location
 
 
 class OrderRepositoryImpl(OrderRepository):
@@ -29,7 +28,7 @@ class OrderRepositoryImpl(OrderRepository):
         self.session.add(order_model)
 
     def update(self, order: Order) -> None:
-        order_model = self.session.query(OrderModel).get(order.id)
+        order_model = self.session.get(OrderModel, order.id)
         if order_model is None:
             raise ValueError(f"Order with id {order.id} not found")
 
@@ -39,7 +38,7 @@ class OrderRepositoryImpl(OrderRepository):
         order_model.courier_id = order.courier_id
 
     def get_by_id(self, order_id: UUID) -> Optional[Order]:
-        order_model = self.session.query(OrderModel).get(order_id)
+        order_model = self.session.get(OrderModel, order_id)
         if order_model is None:
             return None
 

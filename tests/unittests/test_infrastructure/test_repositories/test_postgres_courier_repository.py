@@ -24,7 +24,7 @@ class TestCourierRepository(unittest.TestCase):
 
     def test_add_courier(self):
         # Настраиваем mock для get_by_id (должен возвращать None при первом вызове)
-        self.mock_session.query.return_value.get.return_value = None
+        self.mock_session.get.return_value = None
 
         # Вызываем тестируемый метод
         self.repo.add(self.sample_courier)
@@ -53,7 +53,7 @@ class TestCourierRepository(unittest.TestCase):
             status="free"
         )
 
-        self.mock_session.query.return_value.get.return_value = mock_model
+        self.mock_session.get.return_value = mock_model
 
         result = self.repo.get_by_id(self.sample_courier.id)
 
@@ -62,7 +62,7 @@ class TestCourierRepository(unittest.TestCase):
         self.assertEqual(result.name, "Test Courier")
 
     def test_get_by_id_not_found(self):
-        self.mock_session.query.return_value.get.return_value = None
+        self.mock_session.get.return_value = None
 
         result = self.repo.get_by_id(uuid.uuid4())
         self.assertIsNone(result)
@@ -78,7 +78,7 @@ class TestCourierRepository(unittest.TestCase):
             status="free"
         )
 
-        self.mock_session.query.return_value.get.return_value = mock_model
+        self.mock_session.get.return_value = mock_model
 
         updated_courier = Courier(
             "Updated Name",
