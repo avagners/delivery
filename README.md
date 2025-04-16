@@ -62,6 +62,16 @@ docker exec -it delivery-postgres-1 psql -U ddd_user -d ddd_delivery -c "SELECT 
 docker exec -it delivery-postgres-1 psql -U ddd_user -d ddd_delivery -c "SELECT * FROM orders;"
 ```
 
+### 6. Запуск FastAPI сервера
+
+```bash
+uvicorn api.adapters.http.contract.src.main:app --reload
+```
+После запуска приложение будет доступно по адресу:
+```bash
+http://127.0.0.1:8000
+```
+
 ## Запуск тестов
 
 ```bash
@@ -73,7 +83,6 @@ pytest
 ```bash
 pytest tests/integration/test_create_order_integration.py
 ```
-
 
 ## Остановка
 
