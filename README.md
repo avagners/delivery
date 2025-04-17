@@ -65,7 +65,7 @@ docker exec -it delivery-postgres-1 psql -U ddd_user -d ddd_delivery -c "SELECT 
 ### 6. Запуск FastAPI сервера
 
 ```bash
-uvicorn api.adapters.http.contract.src.main:app --reload
+uvicorn api.adapters.http.contract.src.api.main:app --reload --port 8082
 ```
 После запуска приложение будет доступно по адресу:
 ```bash

@@ -14,8 +14,10 @@
 
 from fastapi import FastAPI
 from fastapi.responses import RedirectResponse
+from fastapi.middleware.cors import CORSMiddleware
 
 from api.adapters.http.contract.src.api.apis.default_api import router as DefaultApiRouter
+from api.adapters.jobs.scheduler import start_jobs
 
 app = FastAPI(
     title="Swagger Delivery",
@@ -25,6 +27,21 @@ app = FastAPI(
 
 app.include_router(DefaultApiRouter)
 
-@app.get("/", include_in_schema=False)
-def redirect_to_docs():
-    return RedirectResponse(url="/docs#/")
+# Настройка CORS
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["http://localhost:8086"],
+    allow_credentials=True,
+    allow_methods=["*"],  # Разрешить все методы (GET, POST, PUT и т. д.)
+    allow_headers=["*"],  # Разрешить все заголовки
+)
+
+@app.get("/")
+async def read_root():
+    return {"message": "Hello, CORS is working!"}
+
+scheduler = start_jobs()
+
+@app.on_event("shutdown")
+def shutdown_event():
+    scheduler.shutdown()
