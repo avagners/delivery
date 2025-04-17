@@ -1,9 +1,10 @@
 import pytest
 from sqlalchemy import create_engine
 
-from config import DATABASE_URL
+from config import DATABASE_URL, GEO_SERVICE
 from infrastructure.adapters.postgres.models import metadata
 from infrastructure.adapters.postgres.unit_of_work import UnitOfWork
+from infrastructure.adapters.grpc.geo_service.geo_client import GeoClient
 
 
 @pytest.fixture(scope="session")
@@ -22,3 +23,8 @@ def reset_database(db_engine):
 @pytest.fixture
 def uow(db_engine):
     return UnitOfWork(connection_string=DATABASE_URL)
+
+
+@pytest.fixture(scope="module")
+def geo_client():
+    return GeoClient(address=GEO_SERVICE)
