@@ -15,7 +15,7 @@ class GetBusyCouriersHandler:
                 text("""
                     SELECT id, name, location_x, location_y
                     FROM public.couriers
-                    WHERE status = 'BUSY'
+                    /* WHERE status = 'BUSY' */
                 """)
             ).fetchall()
 
