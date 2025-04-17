@@ -2,10 +2,11 @@ import uuid
 from core.application.use_cases.commands.create_order.create_order_command import CreateOrderCommand
 from core.application.use_cases.commands.create_order.create_order_handler import CreateOrderCommandHandler
 from infrastructure.adapters.postgres.unit_of_work import UnitOfWork
+from infrastructure.adapters.grpc.geo_service.geo_client import GeoClient
 
 
-def test_create_order_saved_in_db(uow: UnitOfWork):
-    handler = CreateOrderCommandHandler(unit_of_work=uow)
+def test_create_order_saved_in_db(uow: UnitOfWork, geo_client: GeoClient):
+    handler = CreateOrderCommandHandler(unit_of_work=uow, geo_client=geo_client)
 
     basket_id = uuid.uuid4()
     command = CreateOrderCommand(

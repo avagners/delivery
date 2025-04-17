@@ -11,6 +11,7 @@ from core.application.use_cases.queries.get_busy_couriers.get_busy_couriers_quer
 from core.application.use_cases.queries.get_created_and_assigned_orders.get_created_and_assigned_orders_handler import GetCreatedAndAssignedOrdersHandler
 from core.application.use_cases.queries.get_created_and_assigned_orders.get_created_and_assigned_orders_query import GetCreatedAndAssignedOrdersQuery
 from infrastructure.adapters.postgres.unit_of_work import UnitOfWork
+from infrastructure.adapters.grpc.geo_service.geo_client import GeoClient
 
 
 class Router(BaseDefaultApi):
@@ -42,11 +43,11 @@ class Router(BaseDefaultApi):
         # Создаем команду (пока так)
         command = CreateOrderCommand(
             basket_id=uuid.uuid4(),
-            street="Тестовая ул."
+            street="Мобильная"
         )
 
         # Создаем handler с UoW
-        handler = CreateOrderCommandHandler(unit_of_work=UnitOfWork(DATABASE_URL))
+        handler = CreateOrderCommandHandler(unit_of_work=UnitOfWork(DATABASE_URL), geo_client=GeoClient())
 
         # Выполняем бизнес-логику
         handler.handle(command)
